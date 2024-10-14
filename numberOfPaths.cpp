@@ -2,6 +2,11 @@
 
 using namespace std;
 
+// Grid Unique Paths – Count Paths in matrix
+// ---------------------------------------------------------------------------------------------------------
+// The problem is to count all unique possible paths from the top left to the bottom right of a M X N matrix
+// with the constraints that from each cell you can either move only to the right or down.
+
 int numberOfPaths(int m, int n)
 {
     // If either given row number is first or given column
