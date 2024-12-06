@@ -14,35 +14,43 @@ vector<string> split(const string &);
  * The function accepts LONG_INTEGER_ARRAY price as parameter.
  */
 
-int minimumLoss(vector<long> price) {
+int minimumLoss_BruteForce(vector<long> price) {
     int minDiff = INT_MAX;
-    // for (int i=0; i<(price.size()-1); i++) {
-    //     for (int j=(i+1); j<price.size(); j++) {
-    //         if (price[i] > price[j]) {
-    //             int diff = price[i] - price[j];
-    //             if (diff < minDiff) {
-    //                 minDiff = diff;
-    //             }
-    //         }
-    //     }
-    // }
-    //
-    // return minDiff;
-    set<int> priceSet;
-    for (int i = 0; i < price.size(); ++i) {
-        int currentPrice = price[i];
-        auto it = priceSet.upper_bound(currentPrice);
-        if (it != priceSet.begin()) {
-            --it;
-            int loss = *it - currentPrice;
-            if (loss > 0 && loss < minDiff) {
-                minDiff = loss;
+    for (int i=0; i<(price.size()-1); i++) {
+        for (int j=(i+1); j<price.size(); j++) {
+            if (price[i] > price[j]) {
+                int diff = price[i] - price[j];
+                if (diff < minDiff) {
+                    minDiff = diff;
+                }
             }
         }
-        priceSet.insert(currentPrice);
     }
+    
     return minDiff;
+}
 
+int minimumLoss(vector<long> price) {
+    // Pair prices with their indices
+    vector<pair<long, int>> priceIndex;
+    for (int i = 0; i < price.size(); ++i) {
+        priceIndex.push_back({price[i], i});    // first: price, second: index
+    }
+
+    // Sort prices in ascending order
+    sort(priceIndex.begin(), priceIndex.end());
+
+    int minLoss = LONG_MAX;
+
+    // Check consecutive prices in sorted order
+    for (int i = 1; i < priceIndex.size(); ++i) {
+        long priceDiff = priceIndex[i].first - priceIndex[i - 1].first;
+        if (priceDiff < minLoss && priceIndex[i].second < priceIndex[i - 1].second) {
+            minLoss = priceDiff;
+        }
+    }
+
+    return minLoss;
 }
 
 int main()
